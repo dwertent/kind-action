@@ -48,6 +48,23 @@ jobs:
         uses: helm/kind-action@v1
 ```
 
+**Note**: This action supports both `ubuntu-latest` and `macos-latest` runners. When using `macos-latest`, the cloud provider feature will be skipped as it's not available for macOS.
+
+### Example Workflow with macOS
+
+```yaml
+name: Create Cluster on macOS
+
+on: pull_request
+
+jobs:
+  create-cluster:
+    runs-on: macos-latest
+    steps:
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
+```
+
 This uses [@helm/kind-action](https://github.com/helm/kind-action) GitHub Action to spin up a [kind](https://kind.sigs.k8s.io/) Kubernetes cluster on every Pull Request.
 See [@helm/chart-testing-action](https://github.com/helm/chart-testing-action) for a more practical example.
 
@@ -63,7 +80,7 @@ on: pull_request
 
 jobs:
   create-cluster-with-registry:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # or macos-latest
     steps:
       - name: Kubernetes KinD Cluster
         id: kind
