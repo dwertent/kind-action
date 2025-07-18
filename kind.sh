@@ -52,6 +52,44 @@ get_platform() {
     esac
 }
 
+# Setup Docker for the platform
+setup_docker() {
+    local os=$(detect_os)
+    
+    if [[ "$os" == "darwin" ]]; then
+        echo "Setting up Docker on macOS..."
+        
+        # Start Docker Desktop on macOS
+        if ! docker info >/dev/null 2>&1; then
+            echo "Starting Docker Desktop..."
+            open -a Docker
+            echo "Waiting for Docker to be ready..."
+            
+            # Wait for Docker to be available
+            local max_attempts=30
+            local attempt=1
+            while [[ $attempt -le $max_attempts ]]; do
+                if docker info >/dev/null 2>&1; then
+                    echo "Docker is ready!"
+                    break
+                fi
+                echo "Waiting for Docker... (attempt $attempt/$max_attempts)"
+                sleep 10
+                ((attempt++))
+            done
+            
+            if [[ $attempt -gt $max_attempts ]]; then
+                echo "ERROR: Docker failed to start within the expected time"
+                exit 1
+            fi
+        else
+            echo "Docker is already running"
+        fi
+    else
+        echo "Docker setup not needed on Linux"
+    fi
+}
+
 show_help() {
 cat << EOF
 Usage: $(basename "$0") <options>
@@ -125,6 +163,7 @@ main() {
     "${kubectl_dir}/kubectl" version --client=true
 
     if [[ "${install_only}" == false ]]; then
+      setup_docker
       create_kind_cluster
     fi
 }

@@ -48,7 +48,7 @@ jobs:
         uses: helm/kind-action@v1
 ```
 
-**Note**: This action supports both `ubuntu-latest` and `macos-latest` runners. When using `macos-latest`, the cloud provider feature will be skipped as it's not available for macOS.
+**Note**: This action supports both `ubuntu-latest` and `macos-latest` runners. When using `macos-latest`, the cloud provider feature will be skipped as it's not available for macOS. Docker Desktop will be automatically started on macOS runners.
 
 ### Example Workflow with macOS
 

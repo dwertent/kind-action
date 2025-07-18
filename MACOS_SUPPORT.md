@@ -31,7 +31,12 @@ Updated the download URLs to use platform-specific binaries:
 - **Linux**: Installs and runs cloud-provider-kind as before
 - **macOS**: Skips cloud-provider-kind installation with a warning message (not available for macOS)
 
-### 5. Documentation Updates
+### 5. Docker Setup
+
+- **Linux**: Docker is typically available by default
+- **macOS**: Automatically starts Docker Desktop and waits for it to be ready before creating clusters
+
+### 6. Documentation Updates
 
 - Updated `README.md` to indicate macOS support
 - Added example workflow for macOS
@@ -48,6 +53,7 @@ The changes have been tested to ensure:
 5. ✅ Checksum command is available on macOS
 6. ✅ Cloud provider logic correctly skips on macOS
 7. ✅ kubectl checksum verification handles different file formats correctly
+8. ✅ Docker setup automatically starts Docker Desktop on macOS
 
 ## Testing Strategy
 
@@ -69,8 +75,8 @@ This approach provides complete coverage while properly handling platform-specif
 
 ## Files Modified
 
-1. `kind.sh` - Added platform detection and compatibility functions
-2. `README.md` - Updated documentation to reflect macOS support
+1. `kind.sh` - Added platform detection, compatibility functions, and Docker setup for macOS
+2. `README.md` - Updated documentation to reflect macOS support and Docker requirements
 3. `.github/workflows/test.yaml` - Updated all jobs to use matrix strategy for cross-platform testing
 
 ## Files Unchanged
