@@ -17,6 +17,8 @@ Added three new functions to `kind.sh`:
 - **Linux**: Uses `sha256sum` (existing behavior)
 - **macOS**: Uses `shasum -a 256` (macOS equivalent)
 
+**Note**: kubectl SHA256 files contain only the hash value, while kind SHA256 files contain hash + filename. The verification logic handles both formats appropriately.
+
 ### 3. Binary Downloads
 
 Updated the download URLs to use platform-specific binaries:
@@ -45,6 +47,19 @@ The changes have been tested to ensure:
 4. ✅ Architecture detection works (detects "arm64" on Apple Silicon)
 5. ✅ Checksum command is available on macOS
 6. ✅ Cloud provider logic correctly skips on macOS
+7. ✅ kubectl checksum verification handles different file formats correctly
+
+## Testing Strategy
+
+The GitHub Actions workflow now uses a matrix strategy to test all functionality on both Ubuntu and macOS:
+
+- **Most jobs** run on both `ubuntu-latest` and `macos-latest` runners using matrix strategy
+- **Cloud provider testing** uses separate jobs:
+  - `test-with-cloud-provider-enabled`: Runs on Ubuntu only, tests cloud provider functionality
+  - `test-with-cloud-provider-skipped`: Runs on macOS only, verifies cloud provider is correctly skipped
+- **All functionality** is tested on both platforms to ensure compatibility
+
+This approach provides complete coverage while properly handling platform-specific features.
 
 ## Compatibility
 
@@ -56,6 +71,7 @@ The changes have been tested to ensure:
 
 1. `kind.sh` - Added platform detection and compatibility functions
 2. `README.md` - Updated documentation to reflect macOS support
+3. `.github/workflows/test.yaml` - Updated all jobs to use matrix strategy for cross-platform testing
 
 ## Files Unchanged
 

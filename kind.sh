@@ -276,7 +276,20 @@ install_kubectl() {
     pushd "${kubectl_dir}"
     curl -sSLo kubectl "https://dl.k8s.io/release/${kubectl_version}/bin/${platform}/${arch}/kubectl"
     curl -sSLo kubectl.sha256 "https://dl.k8s.io/release/${kubectl_version}/bin/${platform}/${arch}/kubectl.sha256"
-    echo "$(cat kubectl.sha256) kubectl" | $checksum_cmd -c
+    
+    # kubectl.sha256 contains just the hash, so we need to format it properly for verification
+    local expected_hash=$(cat kubectl.sha256 | tr -d '\n')
+    local actual_hash=$($checksum_cmd kubectl | cut -d' ' -f1)
+    
+    if [[ "$expected_hash" == "$actual_hash" ]]; then
+        echo "kubectl checksum verification passed"
+    else
+        echo "ERROR: kubectl checksum verification failed"
+        echo "Expected: $expected_hash"
+        echo "Actual:   $actual_hash"
+        exit 1
+    fi
+    
     chmod +x kubectl
     popd
 }

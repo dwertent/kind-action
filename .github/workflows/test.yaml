@@ -9,7 +9,10 @@ on:
 
 jobs:
   lint-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -23,7 +26,10 @@ jobs:
           kubectl get storageclass standard
 
   test-with-custom-wait:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -40,7 +46,10 @@ jobs:
 
 
   test-with-custom-verbosity:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -56,7 +65,10 @@ jobs:
           kubectl get storageclass standard
 
   test-with-custom-name:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -72,7 +84,10 @@ jobs:
           kubectl get storageclass standard
 
   test-with-install-only:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -87,7 +102,10 @@ jobs:
           [[ $(kind get clusters | wc -l) -eq 0 ]]
 
   test-with-custom-kind-version:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -104,7 +122,10 @@ jobs:
           kubectl get nodes
 
   test-with-custom-kubeconfig:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     env:
       KUBECONFIG: "./kubeconfig"
     steps:
@@ -122,7 +143,10 @@ jobs:
           grep "kube-config-test" ${KUBECONFIG}
 
   test-with-custom-kubectl-version:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -138,7 +162,10 @@ jobs:
           kubectl get nodes
 
   test-with-custom-node-image:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -154,7 +181,10 @@ jobs:
           kubectl get nodes
 
   test-with-ignore-failed-clean:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -171,7 +201,10 @@ jobs:
           kubectl get nodes
 
   test-without-registry:
-      runs-on: ubuntu-latest
+      runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os: [ubuntu-latest, macos-latest]
       steps:
         - name: Checkout
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -192,7 +225,10 @@ jobs:
             fi
 
   test-with-registry:
-      runs-on: ubuntu-latest
+      runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os: [ubuntu-latest, macos-latest]
       steps:
         - name: Checkout
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -225,7 +261,10 @@ jobs:
             kubectl wait --for=condition=complete --timeout=30s job/test
 
   test-with-registry-and-delete-enabled:
-      runs-on: ubuntu-latest
+      runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os: [ubuntu-latest, macos-latest]
       steps:
         - name: Checkout
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -277,4 +316,30 @@ jobs:
             else
               echo "Cloud provider is not present."
               exit 1
-            fi        
+            fi
+
+  test-with-cloud-provider-skipped:
+      runs-on: macos-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Create kind cluster with cloud provider (should skip on macOS)
+          uses: ./
+          with:
+            cloud_provider: true
+
+        - name: Test cloud provider is correctly skipped on macOS
+          run: |
+            kubectl cluster-info
+            kubectl get nodes
+            
+            # Verify cloud-provider-kind is not running (should be skipped on macOS)
+            if ps aux | grep -v grep | grep cloud-provider-kind; then
+              echo "ERROR: Cloud provider should not be running on macOS"
+              exit 1
+            else
+              echo "Cloud provider correctly skipped on macOS"
+            fi
+
+        
