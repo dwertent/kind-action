@@ -59,31 +59,22 @@ setup_docker() {
     if [[ "$os" == "darwin" ]]; then
         echo "Setting up Docker on macOS..."
         
-        # Start Docker Desktop on macOS
+        # Check if Docker is available
         if ! docker info >/dev/null 2>&1; then
-            echo "Starting Docker Desktop..."
-            open -a Docker
-            echo "Waiting for Docker to be ready..."
-            
-            # Wait for Docker to be available
-            local max_attempts=30
-            local attempt=1
-            while [[ $attempt -le $max_attempts ]]; do
-                if docker info >/dev/null 2>&1; then
-                    echo "Docker is ready!"
-                    break
-                fi
-                echo "Waiting for Docker... (attempt $attempt/$max_attempts)"
-                sleep 10
-                ((attempt++))
-            done
-            
-            if [[ $attempt -gt $max_attempts ]]; then
-                echo "ERROR: Docker failed to start within the expected time"
-                exit 1
-            fi
+            echo "ERROR: Docker is not available on this macOS runner."
+            echo "To use kind on macOS, you need to add a Docker setup step to your workflow:"
+            echo ""
+            echo "steps:"
+            echo "  - name: Set up Docker"
+            echo "    uses: docker/setup-buildx-action@v3"
+            echo ""
+            echo "  - name: Create kind cluster"
+            echo "    uses: ./"
+            echo ""
+            echo "Alternatively, use 'install_only: true' to only install kind without creating a cluster."
+            exit 1
         else
-            echo "Docker is already running"
+            echo "Docker is available and ready"
         fi
     else
         echo "Docker setup not needed on Linux"

@@ -17,6 +17,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
+
       - name: Create kind cluster
         uses: ./
 
@@ -33,6 +37,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
 
       - name: Create kind cluster with custom wait
         uses: ./
@@ -54,6 +62,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
+
       - name: Create kind cluster with custom verbosity
         uses: ./
         with:
@@ -72,6 +84,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
 
       - name: Create kind cluster with custom name
         uses: ./
@@ -110,6 +126,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
+
       - name: Create kind cluster with custom name
         uses: ./
         with:
@@ -132,6 +152,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
+
       - name: Create kind cluster with custom kubeconfig
         uses: ./
         with:
@@ -150,6 +174,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
 
       - name: Create kind cluster with custom name
         uses: ./
@@ -170,6 +198,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
+
       - name: Create kind cluster with custom name
         uses: ./
         with:
@@ -188,6 +220,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Docker (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: docker/setup-buildx-action@v3
 
       - name: Create kind cluster with custom name
         uses: ./
@@ -208,6 +244,10 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Set up Docker (macOS only)
+          if: matrix.os == 'macos-latest'
+          uses: docker/setup-buildx-action@v3
 
         - name: Create kind cluster without registry
           uses: ./
@@ -232,6 +272,10 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Set up Docker (macOS only)
+          if: matrix.os == 'macos-latest'
+          uses: docker/setup-buildx-action@v3
 
         - name: Create kind cluster with registry
           id: kind
@@ -268,6 +312,10 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Set up Docker (macOS only)
+          if: matrix.os == 'macos-latest'
+          uses: docker/setup-buildx-action@v3
 
         - name: Create kind cluster with registry and delete enabled
           id: kind
@@ -323,6 +371,9 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Set up Docker (macOS only)
+          uses: docker/setup-buildx-action@v3
 
         - name: Create kind cluster with cloud provider (should skip on macOS)
           uses: ./

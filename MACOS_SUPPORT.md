@@ -34,7 +34,7 @@ Updated the download URLs to use platform-specific binaries:
 ### 5. Docker Setup
 
 - **Linux**: Docker is typically available by default
-- **macOS**: Automatically starts Docker Desktop and waits for it to be ready before creating clusters
+- **macOS**: Requires Docker to be set up in the workflow before using this action. Users must add a Docker setup step to their workflow.
 
 ### 6. Documentation Updates
 
@@ -53,7 +53,7 @@ The changes have been tested to ensure:
 5. ✅ Checksum command is available on macOS
 6. ✅ Cloud provider logic correctly skips on macOS
 7. ✅ kubectl checksum verification handles different file formats correctly
-8. ✅ Docker setup automatically starts Docker Desktop on macOS
+8. ✅ Docker setup provides clear error message and instructions when Docker is not available on macOS
 
 ## Testing Strategy
 

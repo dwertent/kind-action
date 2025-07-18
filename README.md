@@ -48,7 +48,7 @@ jobs:
         uses: helm/kind-action@v1
 ```
 
-**Note**: This action supports both `ubuntu-latest` and `macos-latest` runners. When using `macos-latest`, the cloud provider feature will be skipped as it's not available for macOS. Docker Desktop will be automatically started on macOS runners.
+**Note**: This action supports both `ubuntu-latest` and `macos-latest` runners. When using `macos-latest`, the cloud provider feature will be skipped as it's not available for macOS. Docker must be set up in the workflow before using this action on macOS.
 
 ### Example Workflow with macOS
 
@@ -61,6 +61,9 @@ jobs:
   create-cluster:
     runs-on: macos-latest
     steps:
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+      
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1
 ```
@@ -82,6 +85,11 @@ jobs:
   create-cluster-with-registry:
     runs-on: ubuntu-latest  # or macos-latest
     steps:
+      # Docker setup is required for macOS
+      - name: Set up Docker (macOS only)
+        if: runner.os == 'macOS'
+        uses: docker/setup-buildx-action@v3
+      
       - name: Kubernetes KinD Cluster
         id: kind
         uses: helm/kind-action@v1
